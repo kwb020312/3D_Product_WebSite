@@ -1,6 +1,7 @@
 import express from "express";
 import * as dotenv from "dotenv";
 import { Configuration, OpenAIApi } from "openai";
+import axios from "axios";
 
 dotenv.config();
 
@@ -19,8 +20,25 @@ router.route("/").get((req, res) => {
 router.route("/").post(async (req, res) => {
   try {
     const { prompt } = req.body;
+    const formData = new URLSearchParams();
+    formData.append("source", "ko");
+    formData.append("target", "en");
+    formData.append("text", prompt);
+    const encodedData = formData.toString();
+    const translateData = await axios.post(
+      "https://openapi.naver.com/v1/papago/n2mt",
+      encodedData,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "X-Naver-Client-Id": process.env.NAVER_PAPAGO_CLIENT_ID,
+          "X-Naver-Client-Secret": process.env.NAVER_PAPAGO_CLIENT_SECRET,
+        },
+      }
+    );
+    const enWord = translateData.data.message.result.translatedText;
     const response = await openai.createImage({
-      prompt,
+      prompt: enWord,
       n: 1,
       size: "1024x1024",
       response_format: "b64_json",
