@@ -54,6 +54,21 @@ const Customizer = () => {
     if (!prompt) return alert("Prompt를 입력해주세요");
 
     try {
+      setGeneratingImg(true);
+
+      const response = await fetch("http://localhost:8080/api/v1/dalle", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt,
+        }),
+      });
+
+      const data = await response.json();
+
+      handleDecals(type, `data:image/png;base64,${data.photo}`);
     } catch (error) {
       alert(error);
     } finally {
@@ -79,9 +94,11 @@ const Customizer = () => {
         break;
       case "stylishShirt":
         state.isFullTexture = !activeFilterTab[tabName];
+        break;
       default:
         state.isLogoTexture = true;
         state.isFullTexture = false;
+        break;
     }
 
     setActiveFilterTab((prevState) => {
@@ -127,7 +144,7 @@ const Customizer = () => {
           >
             <CustomButton
               type={"filled"}
-              title="Go Back"
+              title="뒤로가기"
               handleClick={() => (state.intro = true)}
               customStyles={"w-fit px-4 py-2.5 font-bold text-sm"}
             />
