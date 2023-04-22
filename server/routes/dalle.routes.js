@@ -37,6 +37,8 @@ router.route("/").post(async (req, res) => {
       }
     );
     const enWord = translateData.data.message.result.translatedText;
+    // 파파고 조회 결과
+    console.log(enWord);
     const response = await openai.createImage({
       prompt: enWord,
       n: 1,
@@ -45,6 +47,9 @@ router.route("/").post(async (req, res) => {
     });
 
     const image = response.data.data[0].b64_json;
+
+    // OPEN AI 조회 결과
+    console.log(response);
 
     res.status(200).json({ photo: image });
   } catch (error) {
