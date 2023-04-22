@@ -56,18 +56,15 @@ const Customizer = () => {
     try {
       setGeneratingImg(true);
 
-      const response = await fetch(
-        "https://port-0-t3d-product-website-17xqnr2algp4vbaz.sel3.cloudtype.app/api/v1/dalle",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            prompt,
-          }),
-        }
-      );
+      const response = await fetch("/api/v1/dalle", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt,
+        }),
+      });
 
       const data = await response.json();
 
