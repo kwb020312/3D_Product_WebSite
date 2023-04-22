@@ -70,7 +70,7 @@ const Customizer = () => {
 
       handleDecals(type, `data:image/png;base64,${data.photo}`);
     } catch (error) {
-      alert(error);
+      console.log(error);
     } finally {
       setGeneratingImg(false);
       setActiveEditorTab("");
